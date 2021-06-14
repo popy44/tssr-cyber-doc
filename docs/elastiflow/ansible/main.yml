@@ -83,5 +83,28 @@
         path: /etc/logstash/pipelines.yml
         block: |
           - pipeline.id: elastiflow
-          path.config: "/etc/logstash/elastiflow/conf.d/*.conf"
+            path.config: "/etc/logstash/elastiflow/conf.d/*.conf"
 
+    - name: Disable Elasticsearch authentication
+      lineinfile:
+        path: /etc/systemd/system/logstash.service.d/elastiflow.conf
+        regexp: '{{ item.regex }}'
+        line: '{{ item.line }}'
+      with_items:
+        - { regex: '^Environment="ELASTIFLOW_ES_USER=', line: '#Environment="ELASTIFLOW_ES_USER=' }
+        - { regex: '^Environment="ELASTIFLOW_ES_PASSWD=', line: '#Environment="ELASTIFLOW_ES_PASSWD=' }
+
+    - name: Just force systemd to reread configs (2.4 and above)
+      systemd:
+        daemon_reload: yes
+
+    - name: Ensure services are enabled and started
+      systemd:
+        name: '{{ item }}'
+        enabled: yes
+        masked: no
+        state: started
+      with_items:
+        - elasticsearch
+        - kibana
+        - logstash
