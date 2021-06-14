@@ -33,3 +33,14 @@
         - { name: 'elasticsearch', version: '7.13.1' }
         - { name: 'kibana', version: '7.13.1' }
         - { name: 'logstash', version: '1:7.13.1-1' }
+
+    - name: Logstash plugin
+      command: '{{ item }}'
+      with_items:
+        - /usr/share/logstash/bin/logstash-plugin install logstash-codec-sflow
+        - /usr/share/logstash/bin/logstash-plugin update logstash-codec-netflow
+        - /usr/share/logstash/bin/logstash-plugin update logstash-input-udp
+        - /usr/share/logstash/bin/logstash-plugin update logstash-input-tcp
+        - /usr/share/logstash/bin/logstash-plugin update logstash-filter-dns
+        - /usr/share/logstash/bin/logstash-plugin update logstash-filter-geoip
+        - /usr/share/logstash/bin/logstash-plugin update logstash-filter-translate
