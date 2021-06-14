@@ -72,3 +72,8 @@
       copy:
         src: elastiflow-v4.0.1/logstash/elastiflow
         dest: /etc/logstash
+
+    - name: Copy logstash.service.d
+      copy:
+        src: ./elastiflow-v4.0.1/logstash.service.d
+        dest: /etc/systemd/system
