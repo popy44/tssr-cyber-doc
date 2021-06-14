@@ -4,6 +4,10 @@
 
 Sur la page du projet [Github](https://github.com/robcowart/elastiflow) on peut lire "now deprecated ([try the new solution](https://github.com/robcowart/elastiflow))", nouvelle solution payante. Le projet Github est encore fonctionnel et fait largement l'affaire pour un lab étudiant.
 
+![kibana_01](./img/kibana_01.png)
+![kibana_02](./img/kibana_02.png)
+![kibana_03](./img/kibana_03.png)
+
 Table of Contents
 =================
 
@@ -18,7 +22,7 @@ Table of Contents
 
 > Proposition d'architure "simple", à vous de l'adapter en fonction de vos besoins.
 
-![elastiflow_schema](./elastiflow_schema.png)
+![elastiflow_schema](./img/elastiflow_schema.png)
 
 Dans cet exemple le serveur Linux va exporter les informations de ses flux réseaux vers l'instance Elastiflow. Cet export est réalisé via [softflowd](https://github.com/irino/softflowd).
 
