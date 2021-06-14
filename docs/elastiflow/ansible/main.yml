@@ -33,6 +33,12 @@
         - { name: 'elasticsearch', version: '7.13.1' }
         - { name: 'kibana', version: '7.13.1' }
         - { name: 'logstash', version: '1:7.13.1-1' }
+    
+    - name: Download elasticsearch.yml
+      get_url:
+        url: https://raw.githubusercontent.com/simplonco/tssr-cyber-doc/elastiflow_ansible/docs/elastiflow/ansible/elasticsearch.yml
+        dest: /etc/elasticsearch/elasticsearch.yml
+        mode: '0440'
 
     - name: Logstash plugin
       command: '{{ item }}'
