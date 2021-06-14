@@ -36,7 +36,7 @@
 
     - name: Increase Logstash priority
       lineinfile:
-        path: /etc/selinux/config
+        path: /etc/systemd/system/logstash.service 
         regexp: '^Nice='
         line: Nice=0
     
