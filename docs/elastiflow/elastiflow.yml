@@ -3,7 +3,6 @@
   hosts: localhost
 
   tasks:
-    - name: apt install
+    - name: Upgrade the OS (apt-get dist-upgrade)
       apt:
-        name: vim
-        state: present
+        upgrade: dist
