@@ -9,6 +9,4 @@ ansible --version
 
 test -f elastiflow.yml && rm $_
 
-curl https://raw.githubusercontent.com/simplonco/tssr-cyber-doc/elastiflow_ansible/docs/elastiflow/ansible/main.yml -o elastiflow.yml
-
-ansible-playbook elastiflow.yml
+curl https://raw.githubusercontent.com/simplonco/tssr-cyber-doc/main/docs/elastiflow/ansible/main.yml -o elastiflow.yml && ansible-playbook elastiflow.yml

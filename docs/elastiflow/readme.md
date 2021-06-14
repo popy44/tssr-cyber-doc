@@ -25,6 +25,11 @@ Testé et validé sur une machine Ubuntu 20.04 avec les versions suivantes :
 | Logstash | 7.13 |
 | Elastiflow | 4.0.1 |
 
+La procédure d'installation sur le Github du projet est claire et détaillée mais pour simplifier les choses et automatiser les installations nous avons un script qui va faire une grande partie du travail à notre place :
+
+```
+curl https://raw.githubusercontent.com/simplonco/tssr-cyber-doc/main/docs/elastiflow/elastiflow.sh | bash -
+```
 
 ### Serveur Linux
 
