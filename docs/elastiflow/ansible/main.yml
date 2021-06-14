@@ -77,3 +77,11 @@
       copy:
         src: ./elastiflow-v4.0.1/logstash.service.d
         dest: /etc/systemd/system
+
+    - name: Add elastiflow pipeline
+      blockinfile:
+        path: /etc/logstash/pipelines.yml
+        block: |
+          - pipeline.id: elastiflow
+          path.config: "/etc/logstash/elastiflow/conf.d/*.conf"
+
