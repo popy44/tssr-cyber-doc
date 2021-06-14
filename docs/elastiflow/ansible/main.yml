@@ -3,6 +3,15 @@
   hosts: localhost
 
   tasks:
+    - name: Setting host facts using complex arguments
+      set_fact:
+        mem_in_gb: '{{ (ansible_memtotal_mb / 1024 / 2)|int }}'
+
+    - name: Debug memory
+      fail:
+        msg: "There's not enough memory for Java. Only {{ mem_in_gb }} gb memory"
+      when: mem_in_gb < 4
+
     - name: Upgrade the OS (apt-get dist-upgrade)
       apt:
         upgrade: dist
@@ -93,6 +102,13 @@
       with_items:
         - { regex: '^Environment="ELASTIFLOW_ES_USER=', line: '#Environment="ELASTIFLOW_ES_USER=' }
         - { regex: '^Environment="ELASTIFLOW_ES_PASSWD=', line: '#Environment="ELASTIFLOW_ES_PASSWD=' }
+
+    - name: Increase Logstash's heap size.
+      lineinfile:
+        dest: /etc/logstash/jvm.options
+        regexp: '^-Xmx.+$'
+        line: '-Xmx{{ mem_in_gb }}g'
+        state: present
 
     - name: Just force systemd to reread configs (2.4 and above)
       systemd:
