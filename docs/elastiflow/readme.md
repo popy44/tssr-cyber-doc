@@ -4,6 +4,16 @@
 
 Sur la page du projet [Github](https://github.com/robcowart/elastiflow) on peut lire "now deprecated ([try the new solution](https://github.com/robcowart/elastiflow))", nouvelle solution payante. Le projet Github est encore fonctionnel et fait largement l'affaire pour un lab étudiant.
 
+Table of Contents
+=================
+
+* [Architecture](#architecture)
+* [Installation](#installation)
+  * [Elastiflow](#elastiflow-1)
+  * [Serveur Linux](#serveur-linux)
+  * [Nginx reverse proxy](#reserve-proxy)
+  * [Debug](#debug)
+
 ## Architecture
 
 > Proposition d'architure "simple", à vous de l'adapter en fonction de vos besoins.
@@ -117,4 +127,29 @@ systemctl start softflowd
 systemctl status softflowd
 ```
 
+### Reverse proxy
 
+Accéder à votre instance Kibana via Nginx.
+
+Installer le nécessaire
+
+```
+apt-get install --assume-yes nginx python3-certbot-nginx
+```
+
+Générer un certificat
+
+```
+certbot certonly --nginx -d domain.tld -m 'admin_email' --agree-tos -n
+```
+
+Configuration Nginx
+
+```
+# copier le fichier nginx/nginx.conf dans /etc/nginx/sites-enabled/domain.tld.conf et l'adapter (lignes 3 et 10)
+# copier le fichier nginx/ssl.conf dans /etc/nginx/ssl.conf et l'adapter (lignes 3 à 5)
+nginx -t		# pour vérifier la configuration
+service nginx reload	# redémarrer le service
+```
+
+### Debug
