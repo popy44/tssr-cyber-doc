@@ -1,0 +1,8 @@
+# File managed by Ansible
+
+path.data: /var/lib/elasticsearch
+path.logs: /var/log/elasticsearch
+indices.query.bool.max_clause_count: 8192
+search.max_buckets: 250000
+
+# EOF

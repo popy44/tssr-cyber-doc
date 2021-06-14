@@ -2,4 +2,6 @@
 
 ## Documentation
 
+* [Elastiflow](./docs/elastiflow/readme.md)
+
 ## POC

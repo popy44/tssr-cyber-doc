@@ -1,0 +1,133 @@
+---
+- name: Elastiflow
+  hosts: localhost
+
+  tasks:
+    - name: Setting host facts using complex arguments
+      set_fact:
+        mem_in_gb: '{{ (ansible_memtotal_mb / 1024 / 2)| int }}'
+
+    - name: Debug memory
+      debug:
+        msg: "There's {{ mem_in_gb }} gb memory"
+
+    - name: Debug memory
+      fail:
+        msg: "There's not enough memory for Java. Only {{ mem_in_gb }} gb memory"
+      when: mem_in_gb | int < 4
+
+    - name: Upgrade the OS (apt-get dist-upgrade)
+      apt:
+        upgrade: dist
+
+    - name: Install apt-transport-https
+      apt:
+        name: apt-transport-https
+        state: latest
+        install_recommends: no
+
+    - name: Add an Apt signing key, uses whichever key is at the URL
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
+
+    - name: Add specified repository into sources list using specified filename
+      apt_repository:
+        repo: deb https://artifacts.elastic.co/packages/7.x/apt stable main
+        state: present
+        filename: elastic
+        update_cache: yes
+
+    - name: Install Elastic stack
+      apt:
+        name: '{{ item.name }}={{ item.version }}'
+        state: present
+      with_items:
+        - { name: 'elasticsearch', version: '7.13.1' }
+        - { name: 'kibana', version: '7.13.1' }
+        - { name: 'logstash', version: '1:7.13.1-1' }
+
+    - name: Increase Logstash priority
+      lineinfile:
+        path: /etc/systemd/system/logstash.service 
+        regexp: '^Nice='
+        line: Nice=0
+    
+    - name: Download elasticsearch.yml
+      get_url:
+        url: https://raw.githubusercontent.com/simplonco/tssr-cyber-doc/elastiflow_ansible/docs/elastiflow/ansible/elasticsearch.yml
+        dest: /etc/elasticsearch/elasticsearch.yml
+        mode: '0440'
+
+    - name: Logstash plugin
+      command: '{{ item }}'
+      with_items:
+        - /usr/share/logstash/bin/logstash-plugin install logstash-codec-sflow
+        - /usr/share/logstash/bin/logstash-plugin update logstash-codec-netflow
+        - /usr/share/logstash/bin/logstash-plugin update logstash-input-udp
+        - /usr/share/logstash/bin/logstash-plugin update logstash-input-tcp
+        - /usr/share/logstash/bin/logstash-plugin update logstash-filter-dns
+        - /usr/share/logstash/bin/logstash-plugin update logstash-filter-geoip
+        - /usr/share/logstash/bin/logstash-plugin update logstash-filter-translate
+
+    - name: Git checkout https://github.com/robcowart/elastiflow.git
+      git:
+        repo: 'https://github.com/robcowart/elastiflow.git'
+        dest: ./elastiflow-v4.0.1
+        version: v4.0.1
+
+    - name: Copy 87-elastiflow.conf
+      copy:
+        src: ./elastiflow-v4.0.1/sysctl.d/87-elastiflow.conf
+        dest: /etc/sysctl.d/87-elastiflow.conf
+
+    - name: Copy logstash configuration directory
+      copy:
+        src: elastiflow-v4.0.1/logstash/elastiflow
+        dest: /etc/logstash
+
+    - name: Copy logstash.service.d
+      copy:
+        src: ./elastiflow-v4.0.1/logstash.service.d
+        dest: /etc/systemd/system
+
+    - name: Add elastiflow pipeline
+      blockinfile:
+        path: /etc/logstash/pipelines.yml
+        block: |
+          - pipeline.id: elastiflow
+            path.config: "/etc/logstash/elastiflow/conf.d/*.conf"
+
+    - name: Disable Elasticsearch authentication
+      lineinfile:
+        path: /etc/systemd/system/logstash.service.d/elastiflow.conf
+        regexp: '{{ item.regex }}'
+        line: '{{ item.line }}'
+      with_items:
+        - { regex: '^Environment="ELASTIFLOW_ES_USER=', line: '#Environment="ELASTIFLOW_ES_USER=' }
+        - { regex: '^Environment="ELASTIFLOW_ES_PASSWD=', line: '#Environment="ELASTIFLOW_ES_PASSWD=' }
+
+    - name: Increase Logstash's heap size.
+      lineinfile:
+        dest: /etc/logstash/jvm.options
+        regexp: '{{ item.regexp }}'
+        line: '{{ item.line }}'
+        state: present
+      with_items:
+        - { regexp: '^-Xms.+$', line: '-Xms{{ mem_in_gb }}g' }
+        - { regexp: '^-Xmx.+$', line: '-Xmx{{ mem_in_gb }}g' }
+
+    - name: Just force systemd to reread configs (2.4 and above)
+      systemd:
+        daemon_reload: yes
+
+    - name: Ensure services are enabled and started
+      systemd:
+        name: '{{ item }}'
+        enabled: yes
+        masked: no
+        state: started
+      with_items:
+        - elasticsearch
+        - kibana
+        - logstash
