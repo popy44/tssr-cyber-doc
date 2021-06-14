@@ -33,6 +33,12 @@
         - { name: 'elasticsearch', version: '7.13.1' }
         - { name: 'kibana', version: '7.13.1' }
         - { name: 'logstash', version: '1:7.13.1-1' }
+
+    - name: Increase Logstash priority
+      lineinfile:
+        path: /etc/selinux/config
+        regexp: '^Nice='
+        line: Nice=0
     
     - name: Download elasticsearch.yml
       get_url:
@@ -56,3 +62,13 @@
         repo: 'https://github.com/robcowart/elastiflow.git'
         dest: ./elastiflow-v4.0.1
         version: v4.0.1
+
+    - name: Copy 87-elastiflow.conf
+      copy:
+        src: ./elastiflow-v4.0.1/sysctl.d/87-elastiflow.conf
+        dest: /etc/sysctl.d/87-elastiflow.conf
+
+    - name: Copy logstash configuration directory
+      copy:
+        src: elastiflow-v4.0.1/logstash/elastiflow
+        dest: /etc/logstash/elastiflow
