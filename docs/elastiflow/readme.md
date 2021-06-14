@@ -4,10 +4,6 @@
 
 Sur la page du projet [Github](https://github.com/robcowart/elastiflow) on peut lire "now deprecated ([try the new solution](https://github.com/robcowart/elastiflow))", nouvelle solution payante. Le projet Github est encore fonctionnel et fait largement l'affaire pour un lab étudiant.
 
-![kibana_01](./img/kibana_01.png)
-![kibana_02](./img/kibana_02.png)
-![kibana_03](./img/kibana_03.png)
-
 Table of Contents
 =================
 
@@ -17,6 +13,12 @@ Table of Contents
   * [Serveur Linux](#serveur-linux)
   * [Nginx reverse proxy](#reverse-proxy)
   * [Debug](#debug)
+
+Un petit avant goût ...
+
+![kibana_01](./img/kibana_01.png)
+![kibana_02](./img/kibana_02.png)
+![kibana_03](./img/kibana_03.png)
 
 ## Architecture
 
