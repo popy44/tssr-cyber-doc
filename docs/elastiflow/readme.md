@@ -4,6 +4,15 @@
 
 Sur la page du projet [Github](https://github.com/robcowart/elastiflow) on peut lire "now deprecated ([try the new solution](https://github.com/robcowart/elastiflow))", nouvelle solution payante. Le projet Github est encore fonctionnel et fait largement l'affaire pour un lab étudiant.
 
+Table of Contents
+=================
+
+* [Architecture](#architecture)
+* [Installation](#installation)
+  * [Elastiflow](#elastiflow-1)
+  * [Serveur Linux](#serveur-linux)
+  * [Debug](#debug)
+
 ## Architecture
 
 > Proposition d'architure "simple", à vous de l'adapter en fonction de vos besoins.
