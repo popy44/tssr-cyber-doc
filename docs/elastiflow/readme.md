@@ -11,7 +11,7 @@ Table of Contents
 * [Installation](#installation)
   * [Elastiflow](#elastiflow-1)
   * [Serveur Linux](#serveur-linux)
-  * [Nginx reverse proxy](#reserve-proxy)
+  * [Nginx reverse proxy](#reverse-proxy)
   * [Debug](#debug)
 
 ## Architecture
