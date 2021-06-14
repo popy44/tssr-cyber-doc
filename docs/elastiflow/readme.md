@@ -31,6 +31,38 @@ La procédure d'installation sur le Github du projet est claire et détaillée m
 curl https://raw.githubusercontent.com/simplonco/tssr-cyber-doc/main/docs/elastiflow/elastiflow.sh | bash -
 ```
 
+Le script `elastiflow.sh` va :
+
+* Installer Ansible
+* Télécharger un playbook qui va réaliser toute l'installation
+
+Une fois terminé il faut patienter un peu le temps que les services démarrent mais après quelques minutes vous devriez avoir le port :2055 de votre serveur en écoute
+
+```
+lsof -i :2055
+COMMAND   PID     USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+java    28670 logstash  151u  IPv4  81489      0t0  UDP *:2055
+```
+
+Quand l'étape suivante (installation softflowd) sera terminée vous devriez voir un index Elasticsearch `elastiflow-*` :
+
+```
+curl -s 'localhost:9200/_cat/indices/elastiflow-*?v=true&s=index'
+health status index                       uuid                   pri rep docs.count docs.deleted store.size pri.store.size
+yellow open   elastiflow-4.0.1-2021.06.14 Q3z_o9DCRyyARw56vqPmZA   3   1        383            0        1mb            1mb
+```
+
+C'est bon, vous recevez des données !
+
+Il ne vous reste plus qu'à [configurer Kibana et importer les visualisations et dashboards](https://github.com/robcowart/elastiflow/blob/master/INSTALL.md#setting-up-kibana)
+
+Par défaut Kibana écoute uniquement en local sur le port 5601, pour le faire écouter sur une autre adresse et éventuellement le mettre derrière un reverse proxy Nginx il faudra modifier le fichier de configuration `/etc/kibana/kibana.yml` avec quelque chose comme :
+
+```
+server.port: 5601
+server.host: "192.168.100.101"
+```
+
 ### Serveur Linux
 
 Il existe sûrement d'autres solutions mais dans notre cas nous utilisons `softflowd` pour l'export vers Elastiflow. Installer softflowd : `apt-get install softflowd`
