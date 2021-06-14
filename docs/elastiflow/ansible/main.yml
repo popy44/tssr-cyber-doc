@@ -71,4 +71,4 @@
     - name: Copy logstash configuration directory
       copy:
         src: elastiflow-v4.0.1/logstash/elastiflow
-        dest: /etc/logstash/elastiflow
+        dest: /etc/logstash
