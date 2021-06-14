@@ -7,4 +7,6 @@ python3 -m pip install ansible
 
 ansible --version
 
-curl https://raw.githubusercontent.com/simplonco/tssr-cyber-doc/elastiflow_ansible/docs/elastiflow/elastiflow.yml
+curl https://raw.githubusercontent.com/simplonco/tssr-cyber-doc/elastiflow_ansible/docs/elastiflow/elastiflow.yml -o elastiflow.yml
+
+ansible-playbook elastiflow.yml
