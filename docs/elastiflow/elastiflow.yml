@@ -1,0 +1,9 @@
+---
+- name: Elastiflow
+  hosts: localhost
+
+  tasks:
+    - name: apt install
+      apt:
+        name: vim
+        state: present

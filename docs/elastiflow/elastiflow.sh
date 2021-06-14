@@ -6,3 +6,5 @@ apt-get install --assume-yes --quiet python3 python3-pip
 python3 -m pip install ansible
 
 ansible --version
+
+curl https://raw.githubusercontent.com/simplonco/tssr-cyber-doc/elastiflow_ansible/docs/elastiflow/elastiflow.yml
