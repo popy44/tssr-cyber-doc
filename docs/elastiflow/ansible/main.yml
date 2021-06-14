@@ -5,12 +5,16 @@
   tasks:
     - name: Setting host facts using complex arguments
       set_fact:
-        mem_in_gb: '{{ (ansible_memtotal_mb / 1024 / 2)|int }}'
+        mem_in_gb: '{{ (ansible_memtotal_mb / 1024 / 2)| int }}'
+
+    - name: Debug memory
+      debug:
+        msg: "There's {{ mem_in_gb }} gb memory"
 
     - name: Debug memory
       fail:
         msg: "There's not enough memory for Java. Only {{ mem_in_gb }} gb memory"
-      when: mem_in_gb < 4
+      when: mem_in_gb | int < 4
 
     - name: Upgrade the OS (apt-get dist-upgrade)
       apt:
@@ -106,9 +110,12 @@
     - name: Increase Logstash's heap size.
       lineinfile:
         dest: /etc/logstash/jvm.options
-        regexp: '^-Xmx.+$'
-        line: '-Xmx{{ mem_in_gb }}g'
+        regexp: '{{ item.regexp }}'
+        line: '{{ item.line }}'
         state: present
+      with_items:
+        - { regexp: '^-Xms.+$', line: '-Xms{{ mem_in_gb }}g' }
+        - { regexp: '^-Xmx.+$', line: '-Xmx{{ mem_in_gb }}g' }
 
     - name: Just force systemd to reread configs (2.4 and above)
       systemd:
