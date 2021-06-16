@@ -154,6 +154,7 @@ Configuration Nginx
 ```
 # copier le fichier nginx/nginx.conf dans /etc/nginx/sites-enabled/domain.tld.conf et l'adapter (lignes 3 et 10)
 # copier le fichier nginx/ssl.conf dans /etc/nginx/ssl.conf et l'adapter (lignes 3 à 5)
+openssl dhparam -out /etc/ssl/dhparams.pem 2048
 nginx -t		# pour vérifier la configuration
 service nginx reload	# redémarrer le service
 ```
