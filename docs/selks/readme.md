@@ -30,3 +30,7 @@ A adapter en fonction de vos interfaces
 * Après l'installation il faudra faire `selks-first-time-setup_stamus`
 * On s'assurera que Nginx n'est pas bindé sur localhost, par défaut c'est le cas pour le port 80 mais pas 443 donc ça ne devrait pas poser de problème pour l'accès à l'interface web
 * Vérifier que les indexes sont présents et qu'il y a de la donnée qui rentre `curl -s 'localhost:9200/_cat/indices'`
+
+### Ressources
+
+* https://github.com/StamusNetworks/SELKS/wiki/First-time-setup
